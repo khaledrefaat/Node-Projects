@@ -1,0 +1,26 @@
+form {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.form-control {
+  margin: 1rem 0;
+}
+
+.form-control label,
+.form-control input {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
+
+.form-control input {
+  border: 1px solid #a1a1a1;
+  font: inherit;
+  border-radius: 4px;
+  outline-color: #55efc4;
+  width: 30rem;
+  height: 2rem;
+}
