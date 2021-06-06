@@ -3,10 +3,19 @@ const path = require('path');
 
 const routerAdmin = require('./routes/admin');
 const routerShop = require('./routes/shop');
+const expressHbs = require('express-handlebars');
 
 const app = express();
 
-app.set('view engine', 'pug');
+app.engine(
+  'hbs',
+  expressHbs({
+    extname: 'hbs',
+    defaultLayout: 'main-layout',
+    layoutsDir: 'views/layouts/',
+  })
+);
+app.set('view engine', 'hbs');
 app.set('views', 'views');
 
 app.use(express.urlencoded({ extended: false }));
