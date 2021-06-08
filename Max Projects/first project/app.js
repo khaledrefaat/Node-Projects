@@ -3,6 +3,7 @@ const path = require('path');
 
 const routerAdmin = require('./routes/admin');
 const routerShop = require('./routes/shop');
+const errorController = require('./controllers/error');
 
 const app = express();
 
@@ -13,10 +14,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/admin', routerAdmin.routes);
+app.use('/admin', routerAdmin);
 app.use(routerShop);
-app.use((req, res, next) => {
-  res.status(404).render('404', { docTitle: 'Page Not Found' });
-});
+app.use(errorController.get404);
 
 app.listen(9000);

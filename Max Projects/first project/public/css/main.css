@@ -109,3 +109,9 @@ main {
   background-color: #00b894;
   color: white;
 }
+
+.heading-error {
+  color: #00b894;
+  text-align: center;
+  margin-top: 80px;
+}
