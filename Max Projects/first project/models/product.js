@@ -40,8 +40,9 @@ module.exports = class Product {
   }
 
   static findById(id, cb) {
-    if (cb) {
-      return cb.filter(item => item.id.toString() === id)[0];
-    }
+    getProductFromFile(products => {
+      const product = products.find(product => product.id.toString() === id);
+      cb(product);
+    });
   }
 };

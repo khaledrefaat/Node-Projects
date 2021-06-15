@@ -22,11 +22,11 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const { productId } = req.params;
-  Product.fetchAll(product => {
+  Product.findById(productId, product => {
     res.render('shop/product-detail', {
       docTitle: 'Product',
       path: '/product',
-      product: Product.findById(productId, product),
+      product,
     });
   });
 };
