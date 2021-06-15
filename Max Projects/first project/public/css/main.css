@@ -110,26 +110,37 @@ main {
   color: white;
 }
 
-.card__edit--btn {
+.btn__edit {
   background-color: #2980b9;
   color: #fff;
   border: 1px solid #2980b9;
 }
 
-.card__edit--btn:hover {
+.btn__edit:hover {
   background-color: transparent;
   color: #2980b9;
 }
 
-.card__delete--btn {
+.btn__delete {
   background-color: #c0392b;
   color: #fff;
   border: 1px solid #c0392b;
 }
 
-.card__delete--btn:hover {
+.btn__delete:hover {
   color: #c0392b;
   background-color: transparent;
+}
+
+.btn__details {
+  text-decoration: none;
+  color: #2980b9;
+  border: 1px solid #2980b9;
+}
+
+.btn__details:hover {
+  color: #fff;
+  background-color: #2980b9;
 }
 
 .heading-error {

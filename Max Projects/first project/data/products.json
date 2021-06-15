@@ -1,1 +1,23 @@
-[{"title":"Laptop","imageUrl":"https://images.unsplash.com/photo-1552257079-e48b715185fa?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80","price":"1000","description":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s","id":52857}]
+[
+  {
+    "title": "Laptop",
+    "imageUrl": "https://images.unsplash.com/photo-1552257079-e48b715185fa?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80",
+    "price": "1000",
+    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+    "id": 52857
+  },
+  {
+    "title": "Ram",
+    "imageUrl": "https://images.unsplash.com/photo-1603827531753-0d72fb6a45e6?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cmFtJTVDfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    "price": "80",
+    "description": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin",
+    "id": 76060
+  },
+  {
+    "title": "cpu",
+    "imageUrl": "https://images.unsplash.com/photo-1591799265444-d66432b91588?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    "price": "200",
+    "description": "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form",
+    "id": 71371
+  }
+]

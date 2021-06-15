@@ -38,4 +38,10 @@ module.exports = class Product {
   static fetchAll(cb) {
     getProductFromFile(cb);
   }
+
+  static findById(id, cb) {
+    if (cb) {
+      return cb.filter(item => item.id.toString() === id)[0];
+    }
+  }
 };
