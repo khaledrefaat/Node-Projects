@@ -22,8 +22,8 @@
             <%= product.description %>
           </p>
         </div>
-        <div class="card__actions">
-            <button class="btn">Checkout</button>
+        <div class="card__actions card__action--has-child">
+          <%- include('../includes/addToCart.ejs', {product}) %>
             <a class="btn btn__details" href="/products/<%=product.id %>">Details</a>
         </div>
       </article>
