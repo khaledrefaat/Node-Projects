@@ -2,5 +2,14 @@
 </head>
 <body>
 <%- include('../includes/navigation.ejs') %>
-<h1>Cart</h1>
+<main>
+    <% products.forEach(({product, quantity}) => { %>
+        <h1><%= product.title %></h1>
+        <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+        <h3><%= product.price %></h3>
+        <p><%= product.description %></p>
+        <h3>Quantity -> <%= quantity %></h3>
+    <% }) %>
+</main>
+
 <%- include('../includes/ends.ejs') %>
