@@ -1,14 +1,14 @@
 const express = require('express');
 const path = require('path');
-
-const routerAdmin = require('./routes/admin');
-const routerShop = require('./routes/shop');
 const errorController = require('./controllers/error');
 
 const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
+
+const routerAdmin = require('./routes/admin');
+const routerShop = require('./routes/shop');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
