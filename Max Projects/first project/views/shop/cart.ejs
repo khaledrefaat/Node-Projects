@@ -2,14 +2,25 @@
 </head>
 <body>
 <%- include('../includes/navigation.ejs') %>
-<main>
+<main >
+    <div class="cart__container">
+    <% if (products.length > 0) { %>
     <% products.forEach(({product, quantity}) => { %>
-        <h1><%= product.title %></h1>
-        <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
-        <h3><%= product.price %></h3>
-        <p><%= product.description %></p>
-        <h3>Quantity -> <%= quantity %></h3>
-    <% }) %>
+        <div class="cart">
+            <h1><%= product.title %></h1>
+            <img class="cart__img" src="<%= product.imageUrl %>" alt="<%= product.title %>">
+            <h3><%= product.price %></h3>
+            <p><%= product.description %></p>
+            <h3>Quantity -> <%= quantity %></h3>
+            <form action="/cart-delete-item" method="POST">
+                <button type="submit" class="btn btn__delete">Delete</button>
+                <input type="hidden" name="productId" value="<%= product.id %>">
+            </form>
+        </div>
+    <% })} else { %>
+    <h1>Cart Is Empty</h1>
+    <% } %>
+</div>
 </main>
 
 <%- include('../includes/ends.ejs') %>

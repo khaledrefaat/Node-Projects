@@ -38,7 +38,6 @@ module.exports = class Cart {
   }
 
   static deleteProductById = (id, productPrice) => {
-    console.log(productPrice);
     fs.readFile(p, (err, fileContent) => {
       if (err) {
         console.log(err);
@@ -47,8 +46,10 @@ module.exports = class Cart {
 
       const updatedCart = { ...JSON.parse(fileContent) };
       const product = updatedCart.products.find(prod => prod.id === id);
+      if (!product) {
+        return;
+      }
       const productQuantity = product.quantity;
-      console.log(updatedCart.products);
       updatedCart.products = updatedCart.products.filter(
         prod => prod.id !== id
       );

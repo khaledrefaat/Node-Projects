@@ -1,8 +1,1 @@
-{
-  "products": [
-    { "id": "64757", "quantity": 1 },
-    { "id": "86875", "quantity": 1 },
-    { "id": "96305", "quantity": 1 }
-  ],
-  "totalPrice": 1249.97
-}
+{"products":[{"id":"86875","quantity":1}],"totalPrice":49.99000000000001}

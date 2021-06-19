@@ -154,3 +154,26 @@ main {
   text-align: center;
   margin-top: 80px;
 }
+
+.cart__container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 15px;
+  row-gap: 15px;
+}
+
+.cart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.cart__img {
+  width: 300px;
+  height: 300px;
+}
+
+.cart p {
+  max-width: 400px;
+}
