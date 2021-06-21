@@ -4,6 +4,8 @@ const errorController = require('./controllers/error');
 
 const app = express();
 
+const sequelize = require('./util/database');
+
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
@@ -18,4 +20,10 @@ app.use('/admin', routerAdmin);
 app.use(routerShop);
 app.use(errorController.get404);
 
-app.listen(9000);
+sequelize
+  .sync()
+
+  .then(result => {
+    app.listen(9000);
+  })
+  .catch(err => console.log(err));
