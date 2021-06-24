@@ -5,13 +5,13 @@
 <main >
     <div class="cart__container">
     <% if (products.length > 0) { %>
-    <% products.forEach(({product, quantity}) => { %>
+    <% products.forEach(product => { %>
         <div class="cart">
             <h1><%= product.title %></h1>
             <img class="cart__img" src="<%= product.imageUrl %>" alt="<%= product.title %>">
             <h3><%= product.price %></h3>
             <p><%= product.description %></p>
-            <h3>Quantity -> <%= quantity %></h3>
+            <h3>Quantity -> <%= product['cart-item'].quantity %></h3>
             <form action="/cart-delete-item" method="POST">
                 <button type="submit" class="btn btn__delete">Delete</button>
                 <input type="hidden" name="productId" value="<%= product.id %>">
