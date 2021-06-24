@@ -8,6 +8,7 @@ body {
   padding: 0;
   margin: 0;
   font-family: 'Open Sans', sans-serif;
+  overflow-x: hidden;
 }
 
 main {
@@ -203,5 +204,10 @@ main {
 }
 
 .card__content--details {
+  text-align: center;
+}
+
+.order-container {
+  width: 100vw;
   text-align: center;
 }
