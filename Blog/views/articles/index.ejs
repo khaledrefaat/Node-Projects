@@ -1,0 +1,19 @@
+<%- include('../includes/head.ejs') %>  
+  <body>
+    <div class="container">
+      <h1>Blog Articles</h1>
+      <button class="btn btn-success">New Article</button>
+      <% articles.forEach(({title, description, createdAt}) => { %>
+      <div class="card mt-4">
+          <div class="card-body">
+              <h4 class="card-title"><%= title %></h4>
+              <div class="card-subtitle text-muted mb-2 ">
+                  <%= createdAt.toLocaleDateString() %>
+              </div>
+              <div class="card-text mb-2"><%= description %></div>
+          </div>
+      </div>
+      <% }) %>
+    </div>
+  </body>
+</html>

@@ -4,8 +4,6 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
-app.use(express.static('public'));
-
 app.use('/articles', articleRouter);
 
 app.get('/', (req, res, next) => {
