@@ -11,11 +11,11 @@
       <% if(products.length > 0) {%>
       <div class="grid">
         <% products.forEach(product => { %>
-        <article class="card product-item">
-          <header class="card__header">
+        <div class="card product-item">
+          <div class="card__header">
             <h1 class="product__title"><%= product.title %></h1>
-          </header>
-          <div class="card__image">
+          </div>
+          <div class="product__image">
             <img
               src="<%= product.imageUrl %>"
               alt="A Book"
@@ -30,7 +30,7 @@
           <div class="card__actions">
             <%- include('../includes/addToCart.ejs', {product}) %>
           </div>
-        </article>
+        </div>
         <% }) %>
       </div>
       <% } else { %>
