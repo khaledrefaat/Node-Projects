@@ -14,18 +14,18 @@ const {
   signUp,
 } = require('../controllers/admin');
 
-router.get('/add-product', getAddProduct);
+// router.get('/add-product', getAddProduct);
 
-router.get('/edit-product/:prodId', getEditProduct);
+// router.get('/edit-product/:prodId', getEditProduct);
 
-router.post('/edit-product', postEditProduct);
+// router.post('/edit-product', postEditProduct);
 
-router.post('/add-product', postAddProduct);
+// router.post('/add-product', postAddProduct);
 
-router.get('/products', getProducts);
+// router.get('/products', getProducts);
 
-router.post('/delete-product', postDeleteProduct);
+// router.post('/delete-product', postDeleteProduct);
 
-router.post('/signup', signUp);
+// router.post('/signup', signUp);
 
 module.exports = router;
