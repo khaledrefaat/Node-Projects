@@ -113,24 +113,7 @@ class User {
       .collection('orders')
       .find()
       .toArray()
-      .then(orders => {
-        // const productIds = orders[0].items.map(order => order.productId);
-        // getDb()
-        //   .collection('products')
-        //   .find({ _id: { $in: productIds } })
-        //   .toArray()
-        //   .then(products => {
-        //     return products.map(product => {
-        //       return {
-        //         id: product._id,
-        //         products: [
-
-        //         ]
-        //       }
-        //     })
-        //   });
-        return orders;
-      })
+      .then(orders => orders)
       .catch(err => console.log(err));
   }
 

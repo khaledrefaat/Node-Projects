@@ -62,7 +62,6 @@ exports.getEditProduct = (req, res, next) => {
 };
 
 exports.postEditProduct = (req, res, next) => {
-  // console.log(req.body);
   const { productId, title, imageUrl, price, description } = req.body;
   const product = new Product(
     title,
@@ -91,9 +90,9 @@ exports.postDeleteProduct = (req, res, next) => {
 
 exports.signUp = (req, res, next) => {
   const { username, email, password } = req.body;
-  // console.log(req.body);
+
   const user = new User(username, email, password);
-  // console.log(user.save);
+
   user
     .save()
     .then(() => console.log('Created User Complete ^_^'))
