@@ -12,30 +12,30 @@ exports.getIndex = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-// exports.getProducts = (req, res, next) => {
-//   Product.fetchAll()
-//     .then(products => {
-//       res.render('shop/product-list', {
-//         docTitle: 'Products',
-//         path: '/products',
-//         products,
-//       });
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.getProducts = (req, res, next) => {
+  Product.find()
+    .then(products => {
+      res.render('shop/product-list', {
+        docTitle: 'Products',
+        path: '/products',
+        products,
+      });
+    })
+    .catch(err => console.log(err));
+};
 
-// exports.getProduct = (req, res, next) => {
-//   const { productId } = req.params;
-//   Product.findById(productId)
-//     .then(product => {
-//       res.render('shop/product-detail', {
-//         docTitle: product.title,
-//         path: '/product',
-//         product,
-//       });
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.getProduct = (req, res, next) => {
+  const { productId } = req.params;
+  Product.findById(productId)
+    .then(product => {
+      res.render('shop/product-detail', {
+        docTitle: product.title,
+        path: '/product',
+        product,
+      });
+    })
+    .catch(err => console.log(err));
+};
 
 // exports.getCart = (req, res, next) => {
 //   req.user
