@@ -11,11 +11,12 @@ const {
   getCheckout,
   postOrder,
   getOrders,
+  getSignup,
 } = require('../controllers/shop');
 
 const router = express.Router();
 
-// router.get('/', getIndex);
+router.get('/', getIndex);
 
 // router.get('/products', getProducts);
 
@@ -32,5 +33,7 @@ const router = express.Router();
 // router.post('/create-order', postOrder);
 
 // router.get('/orders', getOrders);
+
+router.get('/signup', getSignup);
 
 module.exports = router;

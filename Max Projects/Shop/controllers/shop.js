@@ -1,16 +1,16 @@
-// const Product = require('../models/product');
+const Product = require('../models/product');
 
-// exports.getIndex = (req, res, next) => {
-//   Product.fetchAll()
-//     .then(products => {
-//       res.render('shop/index', {
-//         products,
-//         docTitle: 'Shop',
-//         path: '/',
-//       });
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.getIndex = (req, res, next) => {
+  Product.find()
+    .then(products => {
+      res.render('shop/index', {
+        products,
+        docTitle: 'Shop',
+        path: '/',
+      });
+    })
+    .catch(err => console.log(err));
+};
 
 // exports.getProducts = (req, res, next) => {
 //   Product.fetchAll()
@@ -90,3 +90,10 @@
 //     })
 //     .catch(err => console.log(err));
 // };
+
+exports.getSignup = (req, res, next) => {
+  res.render('shop/signup', {
+    docTitle: 'Sign Up',
+    path: '/signup',
+  });
+};
