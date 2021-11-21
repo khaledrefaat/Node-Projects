@@ -11,12 +11,12 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   const { title, imageUrl, price, description } = req.body;
-
   const product = new Product({
     title,
     price,
     description,
     imageUrl,
+    userId: req.user,
   });
 
   product
@@ -28,7 +28,10 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
+  console.log(req.user);
   Product.find()
+    //   .select('name price')
+    //     .populate('userId', 'name')
     .then(products => {
       res.render('admin/products', {
         docTitle: 'Admin Products',
@@ -89,7 +92,7 @@ exports.postDeleteProduct = (req, res, next) => {
 exports.signUp = (req, res, next) => {
   const { name, email, password } = req.body;
 
-  const user = new User({ email, password, name });
+  const user = new User({ email, password, name, cart: { items: [] } });
 
   user
     .save()

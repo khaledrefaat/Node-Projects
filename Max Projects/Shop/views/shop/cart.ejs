@@ -7,14 +7,14 @@
         <div class="cart__container">
         <% products.forEach(product => { %>
         <div class="cart">
-            <h1><%= product.title %></h1>
-            <img class="cart__img" src="<%= product.imageUrl %>" alt="<%= product.title %>">
-            <h3><%= product.price %></h3>
-            <p><%= product.description %></p>
+            <h1><%= product.productId.title %></h1>
+            <img class="cart__img" src="<%= product.productId.imageUrl %>" alt="<%= product.productId.title %>">
+            <h3><%= product.productId.price %></h3>
+            <p><%= product.productId.description %></p>
             <h3>Quantity -> <%= product.quantity %></h3>
             <form action="/cart-delete-item" method="POST">
                 <button type="submit" class="btn btn__delete">Delete</button>
-                <input type="hidden" name="productId" value="<%= product._id %>">
+                <input type="hidden" name="productId" value="<%= product.productId._id %>">
             </form>
         </div>
         <%  }) %>

@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-// const User = require('./models/user');
+const User = require('./models/user');
 const mongoose = require('mongoose');
 
 const errorController = require('./controllers/error');
@@ -18,20 +18,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use((req, res, next) => {
-//   User.findById('6194d4edc5b4c83c407766af')
-//     .then(user => {
-//       req.user = new User(
-//         user.username,
-//         user.email,
-//         user.password,
-//         user.cart,
-//         user._id
-//       );
-//       next();
-//     })
-//     .catch(err => console.log(err));
-// });
+app.use((req, res, next) => {
+  User.findById('6198dc989783e6f737ac2508')
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
+});
 
 app.use('/admin', routerAdmin);
 app.use(routerShop);
