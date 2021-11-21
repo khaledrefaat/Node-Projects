@@ -1,5 +1,5 @@
 const Product = require('../models/product');
-const User = require('../models/user');
+const Order = require('../models/order');
 
 exports.getIndex = (req, res, next) => {
   Product.find()
@@ -76,21 +76,46 @@ exports.postCartDeleteProduct = (req, res, next) => {
 //   });
 // };
 
-// exports.postOrder = (req, res, next) =>
-//   req.user.addOrder().then(result => res.redirect('/cart'));
+exports.postOrder = (req, res, next) => {
+  req.user
+    .populate('cart.items.productId')
+    .then(products => {
+      const order = new Order({
+        items: products.cart.items,
+        user: {
+          userId: products._id,
+          name: products.name,
+        },
+      });
+      order.save();
+      req.user.clearCart();
+    })
+    .then(result => res.redirect('/cart'))
+    .catch(err => console.log(err));
+};
 
-// exports.getOrders = (req, res, next) => {
-//   req.user
-//     .getOrders()
-//     .then(orders => {
-//       res.render('shop/orders', {
-//         docTitle: 'Orders',
-//         path: '/orders',
-//         orders,
-//       });
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.getOrders = (req, res, next) => {
+  // req.user
+  //   .getOrders()
+  //   .then(orders => {
+  //     res.render('shop/orders', {
+  //       docTitle: 'Orders',
+  //       path: '/orders',
+  //       orders,
+  //     });
+  //   })
+  //   .catch(err => console.log(err));
+
+  Order.find()
+    .populate('items.productId')
+    .then(orders => {
+      res.render('shop/orders', {
+        docTitle: 'Orders',
+        path: '/orders',
+        orders,
+      });
+    });
+};
 
 exports.getSignup = (req, res, next) => {
   res.render('shop/signup', {

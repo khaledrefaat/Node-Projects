@@ -30,9 +30,9 @@ router.post('/cart-delete-item', postCartDeleteProduct);
 
 // // router.get('/checkout', getCheckout);
 
-// router.post('/create-order', postOrder);
+router.post('/create-order', postOrder);
 
-// router.get('/orders', getOrders);
+router.get('/orders', getOrders);
 
 router.get('/signup', getSignup);
 
