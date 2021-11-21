@@ -54,10 +54,8 @@ exports.getCart = (req, res, next) => {
 exports.postCart = (req, res, next) => {
   const { productId } = req.body;
   Product.findById(productId)
-    .then(product => {
-      return req.user.addToCart(product);
-    })
-    .then(result => res.redirect('/cart'))
+    .then(product => req.user.addToCart(product))
+    .then(() => res.redirect('/cart'))
     .catch(err => console.log(err));
 };
 
@@ -65,7 +63,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
   const { productId } = req.body;
   req.user
     .removeFromCart(productId)
-    .then(result => res.redirect('/cart'))
+    .then(() => res.redirect('/cart'))
     .catch(err => console.log(err));
 };
 
@@ -79,42 +77,47 @@ exports.postCartDeleteProduct = (req, res, next) => {
 exports.postOrder = (req, res, next) => {
   req.user
     .populate('cart.items.productId')
-    .then(products => {
+    .then(user => {
+      const products = user.cart.items.map(i => {
+        return {
+          quantity: i.quantity,
+          product: { ...i.productId._doc },
+        };
+      });
+
       const order = new Order({
-        items: products.cart.items,
+        products: products,
         user: {
-          userId: products._id,
-          name: products.name,
+          userId: req.user._id,
+          name: req.user.name,
         },
       });
       order.save();
-      req.user.clearCart();
     })
-    .then(result => res.redirect('/cart'))
+    .then(() => req.user.clearCart())
+    .then(() => res.redirect('/orders'))
     .catch(err => console.log(err));
 };
 
 exports.getOrders = (req, res, next) => {
-  // req.user
-  //   .getOrders()
-  //   .then(orders => {
-  //     res.render('shop/orders', {
-  //       docTitle: 'Orders',
-  //       path: '/orders',
-  //       orders,
-  //     });
-  //   })
-  //   .catch(err => console.log(err));
+  Order.find().then(orders => {
+    let total = 0;
 
-  Order.find()
-    .populate('items.productId')
-    .then(orders => {
-      res.render('shop/orders', {
-        docTitle: 'Orders',
-        path: '/orders',
-        orders,
+    // this is so bad it's n^2 code
+    orders.forEach(prod => {
+      return prod.products.forEach(p => {
+        return (total += p.quantity * p.product.price);
       });
     });
+
+    orders.total = total;
+
+    res.render('shop/orders', {
+      docTitle: 'Orders',
+      path: '/orders',
+      orders,
+    });
+  });
 };
 
 exports.getSignup = (req, res, next) => {

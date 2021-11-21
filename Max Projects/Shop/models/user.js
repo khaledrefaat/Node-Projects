@@ -54,7 +54,7 @@ userSchema.methods.addToCart = function (product) {
   };
 
   this.cart = updatedCart;
-  this.save();
+  return this.save();
 };
 
 userSchema.methods.removeFromCart = function (id) {
@@ -67,7 +67,7 @@ userSchema.methods.removeFromCart = function (id) {
 };
 
 userSchema.methods.clearCart = function () {
-  this.cart.items = [];
+  this.cart = { items: [] };
   return this.save();
 };
 

@@ -17,23 +17,24 @@
                     <div>Price</div>
                     <div>Quantity</div>
                 </li>
-                <% order.items.forEach(product => { %>
+                <% order.products.forEach(p => { %>
                     
                     <li class="order-item">  
                         <div>
-                            <%= product.productId.title %>
+                            <%= p.product.title %>
                         </div>
                         <div>
-                            <%= product.productId.price %>$
+                            <%= p.product.price %>$
                         </div>
-                        <div>( <%= product.quantity %> )</div>
+                        <div>( <%= p.quantity %> )</div>
                     </li>
                 <% }) %>
             </ul>
             <hr>
     </li>
         <% }) %>
-        </ul>
+    </ul>
+    <h2 style="text-align: center;">Total Price: <%= orders.total %>$</h2>
     <% } %>
 </main>
 <%- include('../includes/ends.ejs') %>
