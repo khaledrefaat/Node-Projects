@@ -6,20 +6,16 @@
   <body>
     <%- include('../includes/navigation.ejs') %>
     <main>
-      <form class="product-form" action="/admin/signup" method="POST">
+      <form class="product-form login-form" action="/login" method="POST">
         <div class="form-control">
-          <label for="email">Email</label>
+          <label for="email">E-mail</label>
           <input type="text" name="email" id="email" />
         </div>
         <div class="form-control">
           <label for="password">Password</label>
           <input type="password" name="password" id="password" />
         </div>
-        <div class="form-control">
-          <label for="name">Name</label>
-          <input type="text" step="0.01" name="name" id="name" />
-        </div>
-        <button class="btn" type="submit">Sign Up</button>
+        <button class="btn" type="submit">Login</button>
       </form>
     </main>
 <%- include('../includes/ends.ejs') %>

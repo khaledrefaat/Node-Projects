@@ -5,6 +5,10 @@ form {
   transform: translate(-50%, -50%);
 }
 
+.login-form {
+  top: 30%;
+}
+
 .form-control {
   margin: 1rem 0;
 }

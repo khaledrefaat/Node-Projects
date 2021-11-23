@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 
 const {
   getIndex,
@@ -33,7 +32,5 @@ router.post('/cart-delete-item', postCartDeleteProduct);
 router.post('/create-order', postOrder);
 
 router.get('/orders', getOrders);
-
-router.get('/signup', getSignup);
 
 module.exports = router;

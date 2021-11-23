@@ -34,6 +34,7 @@ main {
   margin: 0;
   padding: 0;
   display: flex;
+  width: 100%;
 }
 
 .main-header__item {
@@ -41,16 +42,33 @@ main {
   padding: 0;
 }
 
-.main-header__item a {
+.main-header__item button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.main-header__item button:hover {
+  color: #fadf86;
+}
+
+.main-header__item a,
+.main-header__item button {
   text-decoration: none;
   color: white;
   font-size: 22px;
+  transition: color 0.3s ease-out;
 }
 
 .main-header__item a:hover,
 .main-header__item a:active,
 .main-header__item a.active {
   color: #fadf86;
+}
+
+.header__item-last {
+  margin-left: auto;
+  margin-right: 60px;
 }
 
 .grid {

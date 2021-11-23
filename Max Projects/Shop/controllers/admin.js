@@ -6,6 +6,7 @@ exports.getAddProduct = (req, res, next) => {
     docTitle: 'Add Product',
     path: '/admin/add-product',
     editing: false,
+    isAuthenticated: req.session.isLoggedin,
   });
 };
 
@@ -35,6 +36,7 @@ exports.getProducts = (req, res, next) => {
         docTitle: 'Admin Products',
         path: '/admin/products',
         products,
+        isAuthenticated: req.session.isLoggedin,
       });
     })
     .catch(err => console.log(err));
@@ -55,6 +57,7 @@ exports.getEditProduct = (req, res, next) => {
         path: '/admin/edit-product',
         editing: editMode,
         product,
+        isAuthenticated: req.session.isLoggedin,
       });
     })
     .catch(err => console.log(err));
@@ -83,20 +86,6 @@ exports.postDeleteProduct = (req, res, next) => {
   Product.findByIdAndRemove(productId)
     .then(() => {
       res.redirect('/admin/products');
-    })
-    .catch(err => console.log(err));
-};
-
-exports.signUp = (req, res, next) => {
-  const { name, email, password } = req.body;
-
-  const user = new User({ email, password, name, cart: { items: [] } });
-
-  user
-    .save()
-    .then(() => {
-      console.log('Created User Complete ^_^');
-      res.redirect('/');
     })
     .catch(err => console.log(err));
 };

@@ -2,24 +2,45 @@ const express = require('express');
 const path = require('path');
 const User = require('./models/user');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoDbStore = require('connect-mongodb-session')(session);
 
 const errorController = require('./controllers/error');
 // const { mongoCofnnect } = require('./util/database');
 
+const MONGODB_URI =
+  'mongodb+srv://khaledrefaat:5214705@cluster0.nos6l.mongodb.net/shop';
+
 const app = express();
+const store = new MongoDbStore({
+  uri: MONGODB_URI,
+  collection: 'sessions',
+});
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 const routerAdmin = require('./routes/admin');
 const routerShop = require('./routes/shop');
+const routerAuth = require('./routes/auth');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+  session({
+    secret: 'My Very Secret Secret',
+    resave: false,
+    saveUninitialized: false,
+    store,
+  })
+);
 
 app.use((req, res, next) => {
-  User.findById('6198dc989783e6f737ac2508')
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
     .then(user => {
       req.user = user;
       next();
@@ -29,12 +50,11 @@ app.use((req, res, next) => {
 
 app.use('/admin', routerAdmin);
 app.use(routerShop);
+app.use(routerAuth);
 app.use(errorController.get404);
 
 mongoose
-  .connect(
-    'mongodb+srv://khaledrefaat:5214705@cluster0.nos6l.mongodb.net/shop?authSource=admin&replicaSet=atlas-mlj2fm-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true'
-  )
+  .connect(MONGODB_URI)
   .then(result => {
     app.listen(3000);
   })
