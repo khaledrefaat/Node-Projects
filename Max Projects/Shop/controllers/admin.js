@@ -29,7 +29,6 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  console.log(req.user);
   Product.find()
     .then(products => {
       res.render('admin/products', {
