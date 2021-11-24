@@ -8,6 +8,10 @@
     <main>
       <form class="product-form" action="/signup" method="POST">
         <div class="form-control">
+          <label for="name">Name</label>
+          <input type="text" step="0.01" name="name" id="name" />
+        </div>
+        <div class="form-control">
           <label for="email">Email</label>
           <input type="text" name="email" id="email" />
         </div>
@@ -16,8 +20,8 @@
           <input type="password" name="password" id="password" />
         </div>
         <div class="form-control">
-          <label for="name">Name</label>
-          <input type="text" step="0.01" name="name" id="name" />
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" name="confirmPassword" id="confirmPassword" />
         </div>
         <button class="btn" type="submit">Sign Up</button>
       </form>

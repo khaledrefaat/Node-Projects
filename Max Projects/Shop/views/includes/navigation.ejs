@@ -39,6 +39,11 @@
       </li>
       <% } else { %>
       <li class="main-header__item header__item-last">
+        <a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup"
+          >Signup</a
+        >
+      </li>
+      <li class="main-header__item">
         <a class="<%= path === '/login' ? 'active' : '' %>" href="/login"
           >Login</a
         >
