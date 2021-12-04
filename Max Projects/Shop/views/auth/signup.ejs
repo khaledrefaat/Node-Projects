@@ -6,7 +6,15 @@
   <body>
     <%- include('../includes/navigation.ejs') %>
     <main>
-      <form class="product-form" action="/signup" method="POST">
+      <% if(errorMessage.length > 0) { %>
+        <div class="error">
+          <p>
+            <%= errorMessage[0] %>
+          </p>
+        </div>
+      <% } %>
+      <form class="form" action="/signup" method="POST">
+        <input type="hidden" value="<%= csrfToken %>" name="_csrf" />
         <div class="form-control">
           <label for="name">Name</label>
           <input type="text" step="0.01" name="name" id="name" />

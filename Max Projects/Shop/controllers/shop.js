@@ -8,7 +8,6 @@ exports.getIndex = (req, res, next) => {
         products,
         docTitle: 'Shop',
         path: '/',
-        isAuthenticated: req.session.isLoggedin,
       });
     })
     .catch(err => console.log(err));
@@ -21,7 +20,6 @@ exports.getProducts = (req, res, next) => {
         docTitle: 'Products',
         path: '/products',
         products,
-        isAuthenticated: req.session.isLoggedin,
       });
     })
     .catch(err => console.log(err));
@@ -35,7 +33,6 @@ exports.getProduct = (req, res, next) => {
         docTitle: product.title,
         path: '/product',
         product,
-        isAuthenticated: req.session.isLoggedin,
       });
     })
     .catch(err => console.log(err));
@@ -49,7 +46,6 @@ exports.getCart = (req, res, next) => {
         docTitle: 'Cart',
         path: '/cart',
         products: products.cart.items,
-        isAuthenticated: req.session.isLoggedin,
       });
     })
     .catch(err => console.log(err));
@@ -70,13 +66,6 @@ exports.postCartDeleteProduct = (req, res, next) => {
     .then(() => res.redirect('/cart'))
     .catch(err => console.log(err));
 };
-
-// exports.getCheckout = (req, res, next) => {
-//   res.render('shop/checkout', {
-//     docTitle: 'Check out',
-//     path: '/checkout',
-//   });
-// };
 
 exports.postOrder = (req, res, next) => {
   req.user

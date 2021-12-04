@@ -1,36 +1,22 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/new', (req, res, next) => {
-  res.render('articles/new', { docTitle: 'New Blog' });
-});
+const {
+  postArticle,
+  getArticles,
+  getEditArticle,
+  editArticle,
+  deleteArticle,
+} = require('../controllers/articles');
 
-router.get('/', (req, res, next) => {
-  const articles = [
-    {
-      title: 'Blog 1',
-      description: `
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-      `,
-      createdAt: new Date(),
-    },
-    {
-      title: 'Blog 1',
-      description: `
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-      `,
-      createdAt: new Date(),
-    },
-    {
-      title: 'Blog 1',
-      description: `
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-      `,
-      createdAt: new Date(),
-    },
-  ];
+router.get('/', getArticles);
 
-  res.render('articles/index', { articles, docTitle: 'Blog' });
-});
+router.post('/new', postArticle);
+
+router.get('/edit/:id', getEditArticle);
+
+router.patch('/edit/:id', editArticle);
+
+router.delete('/:id', deleteArticle);
 
 module.exports = router;

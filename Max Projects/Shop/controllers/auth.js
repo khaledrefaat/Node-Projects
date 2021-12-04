@@ -6,7 +6,7 @@ exports.getLogin = (req, res, next) => {
   res.render('auth/login', {
     docTitle: 'Login',
     path: '/login',
-    isAuthenticated: false,
+    errorMessage: req.flash('error'),
   });
 };
 
@@ -15,17 +15,23 @@ exports.postLogin = (req, res, next) => {
 
   return User.findOne({ email })
     .then(user => {
-      return bcrypt.compare(password, user.password).then(result => {
-        if (user && result) {
-          req.session.isLoggedin = true;
-          req.session.user = user;
-          return req.session.save(err => {
-            console.log(err);
-            res.redirect('/');
-          });
-        }
-        req.isLoggedin = false;
+      if (!user) {
+        req.flash('error', 'Invalid Email.');
         return res.redirect('/login');
+      }
+
+      return bcrypt.compare(password, user.password).then(result => {
+        if (!result) {
+          req.flash('error', 'Invalid Password.');
+          return res.redirect('/login');
+        }
+
+        req.session.isLoggedin = true;
+        req.session.user = user;
+        return req.session.save(err => {
+          console.log(err);
+          res.redirect('/');
+        });
       });
     })
     .catch(err => {
@@ -44,7 +50,7 @@ exports.getSignup = (req, res, next) => {
   res.render('auth/signup', {
     docTitle: 'Sign Up',
     path: '/signup',
-    isAuthenticated: false,
+    errorMessage: req.flash('error'),
   });
 };
 
@@ -53,7 +59,13 @@ exports.postSignUp = (req, res, next) => {
 
   User.findOne({ email: email })
     .then(user => {
-      if (password !== confirmPassword || user) {
+      if (password !== confirmPassword) {
+        req.flash('error', 'Password confirmation does not match password.');
+        return res.redirect('/signup');
+      }
+
+      if (user) {
+        req.flash('error', 'Email already exists.');
         return res.redirect('/signup');
       }
 
