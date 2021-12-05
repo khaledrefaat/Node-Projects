@@ -1,6 +1,7 @@
-const { findById } = require('../models/article');
 const Article = require('../models/article');
+const User = require('../models/user');
 const HttpError = require('../models/http-error');
+const { validationResult } = require('express-validator');
 
 exports.getArticles = (req, res, next) => {
   Article.find({})
@@ -12,19 +13,44 @@ exports.getArticles = (req, res, next) => {
     });
 };
 
-exports.postArticle = (req, res, next) => {
-  const reqBody = req.body;
+exports.postArticle = async (req, res, next) => {
+  const validationResultError = validationResult(req);
+
+  if (!validationResultError.isEmpty())
+    return next(new HttpError('Invalid Inputs.', 422));
+
+  const { title, description, image, userId } = req.body;
+
+  let user;
+  try {
+    user = await User.findById(userId);
+  } catch (err) {
+    console.log(err);
+    return next(new HttpError('Something went wrong, try again later.', 500));
+  }
+
   const article = new Article({
-    title: reqBody.title,
-    description: reqBody.description,
-    imageUrl: reqBody.image || null,
+    title: title,
+    description: description,
+    imageUrl: image || null,
+    creator: userId,
   });
-  article
-    .save()
-    .then(() => {
-      res.json({ Message: 'Done' });
-    })
-    .catch(err => console.log(err));
+
+  try {
+    await article.save();
+  } catch (err) {
+    console.log(err);
+    return next(new HttpError('Something went wrong, try again later.', 500));
+  }
+  try {
+    user.articles.push(article);
+    await user.save();
+  } catch (err) {
+    console.log(err);
+    return next(new HttpError('Something went wrong, try again later.', 500));
+  }
+
+  res.json({ article });
 };
 
 exports.getEditArticle = async (req, res, next) => {

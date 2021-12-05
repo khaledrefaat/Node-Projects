@@ -21,6 +21,8 @@ exports.login = async (req, res, next) => {
   if (exsistingUser.password !== password)
     return next(new HttpError('Incorrect Password.', 401));
 
+  console.log(exsistingUser.articles);
+
   let token;
   try {
     token = jwt.sign(
