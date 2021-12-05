@@ -1,5 +1,4 @@
 const express = require('express');
-const articleRouter = require('./routes/articles');
 const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -8,8 +7,12 @@ const HttpError = require('./models/http-error');
 
 const MONGODB_URI = 'mongodb://localhost:27017/test';
 
+const articleRouter = require('./routes/articles-routes');
+const userRouter = require('./routes/users-routes');
+
 app.use(bodyParser.json());
 
+app.use('/users', userRouter);
 app.use('/articles', articleRouter);
 
 app.get('/', (req, res, next) => {

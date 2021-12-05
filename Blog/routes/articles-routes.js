@@ -7,7 +7,7 @@ const {
   getEditArticle,
   editArticle,
   deleteArticle,
-} = require('../controllers/articles');
+} = require('../controllers/articles-controllers');
 
 router.get('/', getArticles);
 
