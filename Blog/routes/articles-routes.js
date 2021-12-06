@@ -4,8 +4,9 @@ const { check } = require('express-validator');
 const checkAuth = require('../middleware/check-auth');
 
 const {
-  postArticle,
   getArticles,
+  getArticlesByUserId,
+  postArticle,
   getEditArticle,
   editArticle,
   deleteArticle,
@@ -14,6 +15,8 @@ const {
 router.get('/', getArticles);
 
 router.use(checkAuth);
+
+router.get('/user/:userId', getArticlesByUserId);
 
 router.post(
   '/new',

@@ -14,6 +14,25 @@ exports.getArticles = (req, res, next) => {
     });
 };
 
+exports.getArticlesByUserId = async (req, res, next) => {
+  const { userId } = req.params;
+
+  let user;
+  try {
+    user = await User.findById(userId).populate('articles');
+  } catch (err) {
+    console.log(err);
+    return next(new HttpError('Something went wrong, try again later.', 500));
+  }
+
+  if (!user)
+    return next(
+      new HttpError('Could not find a place with the provided user id.', 404)
+    );
+
+  res.json(user.articles);
+};
+
 exports.postArticle = async (req, res, next) => {
   const validationResultError = validationResult(req);
 

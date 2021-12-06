@@ -3,6 +3,22 @@ const HttpError = require('../models/http-error');
 const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 
+exports.getUsers = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.find({}).select('username');
+  } catch (err) {
+    console.log(err);
+    return next(
+      new HttpError('Something went wrong, please try again later.', 500)
+    );
+  }
+
+  if (!users) return res.json({ message: 'No users found' });
+
+  res.json(users);
+};
+
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
