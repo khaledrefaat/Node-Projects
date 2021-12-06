@@ -44,8 +44,11 @@ exports.postArticle = async (req, res, next) => {
     return next(new HttpError('Something went wrong, try again later.', 500));
   }
   try {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     user.articles.push(article);
     await user.save();
+    session.commitTransaction();
   } catch (err) {
     console.log(err);
     return next(new HttpError('Something went wrong, try again later.', 500));
@@ -108,16 +111,6 @@ exports.deleteArticle = async (req, res, next) => {
   if (!article)
     return next(new HttpError("couldn't delete this article!", 400));
 
-  let user;
-  try {
-    user = await User.findById(article.creator);
-  } catch (err) {
-    console.log(err);
-    return next(
-      new HttpError('something went wrong, please try again later.', 400)
-    );
-  }
-
   try {
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -127,6 +120,7 @@ exports.deleteArticle = async (req, res, next) => {
     await session.commitTransaction();
   } catch (err) {
     console.log(err);
+    return next(new HttpError('Something went wrong, try again later.', 500));
   }
   res.json({ message: 'Article Deleted -_-' });
 };
