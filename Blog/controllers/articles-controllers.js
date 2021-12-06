@@ -2,6 +2,7 @@ const Article = require('../models/article');
 const User = require('../models/user');
 const HttpError = require('../models/http-error');
 const { validationResult } = require('express-validator');
+const mongoose = require('mongoose');
 
 exports.getArticles = (req, res, next) => {
   Article.find({})
@@ -99,7 +100,7 @@ exports.deleteArticle = async (req, res, next) => {
   let article;
 
   try {
-    article = await Article.findById(id);
+    article = await Article.findById(id).populate('creator');
   } catch (err) {
     console.log(err);
   }
@@ -107,8 +108,23 @@ exports.deleteArticle = async (req, res, next) => {
   if (!article)
     return next(new HttpError("couldn't delete this article!", 400));
 
+  let user;
   try {
-    await Article.findByIdAndRemove(id, { useFindAndModify: false });
+    user = await User.findById(article.creator);
+  } catch (err) {
+    console.log(err);
+    return next(
+      new HttpError('something went wrong, please try again later.', 400)
+    );
+  }
+
+  try {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    article.remove({ session });
+    article.creator.articles.pull(article);
+    article.creator.save({ session });
+    await session.commitTransaction();
   } catch (err) {
     console.log(err);
   }
