@@ -1,5 +1,17 @@
 const Product = require('../models/product');
 
+exports.getProducts = (req, res, next) => {
+  Product.find({ userId: req.user._id })
+    .then(products => {
+      res.render('admin/products', {
+        docTitle: 'Admin Products',
+        path: '/admin/products',
+        products,
+      });
+    })
+    .catch(err => console.log(err));
+};
+
 exports.getAddProduct = (req, res, next) => {
   res.render('admin/edit-product', {
     docTitle: 'Add Product',
@@ -26,18 +38,6 @@ exports.postAddProduct = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-exports.getProducts = (req, res, next) => {
-  Product.find()
-    .then(products => {
-      res.render('admin/products', {
-        docTitle: 'Admin Products',
-        path: '/admin/products',
-        products,
-      });
-    })
-    .catch(err => console.log(err));
-};
-
 exports.getEditProduct = (req, res, next) => {
   const { prodId } = req.params;
 
@@ -47,7 +47,8 @@ exports.getEditProduct = (req, res, next) => {
   }
   Product.findById(prodId)
     .then(product => {
-      if (!product) res.redirect('/');
+      if (product.userId.toString() !== req.user._id.toString())
+        return res.redirect('/');
       res.render('admin/edit-product', {
         docTitle: 'Edit Product',
         path: '/admin/edit-product',
@@ -63,6 +64,7 @@ exports.postEditProduct = (req, res, next) => {
 
   Product.findById(productId)
     .then(product => {
+      if (product.userId !== req.user._id) return res.redirect('/');
       product.title = title;
       product.price = price;
       product.imageUrl = imageUrl;
@@ -78,9 +80,7 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const { productId } = req.body;
-  Product.findByIdAndRemove(productId)
-    .then(() => {
-      res.redirect('/admin/products');
-    })
+  Product.deleteOne({ _id: productId, userId: req.user._id })
+    .then(() => res.redirect('/admin/products'))
     .catch(err => console.log(err));
 };
