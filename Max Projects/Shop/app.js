@@ -6,11 +6,11 @@ const session = require('express-session');
 const MongoDbStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
+const keys = require('./config/keys');
 
 const errorController = require('./controllers/error');
 
-const MONGODB_URI =
-  'mongodb+srv://khaledrefaat:5214705@cluster0.nos6l.mongodb.net/shop';
+const MONGODB_URI = keys.mongoUri;
 
 const app = express();
 const store = new MongoDbStore({

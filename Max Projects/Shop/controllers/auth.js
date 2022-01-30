@@ -3,11 +3,13 @@ const sgTransport = require('nodemailer-sendgrid-transport');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const crypto = require('crypto');
+const { validationResult } = require('express-validator/check');
+const keys = require('../config/keys');
 
 const transporter = nodemailer.createTransport(
   sgTransport({
     auth: {
-      api_key: 'add_the_api_key_here',
+      api_key: keys.sendgridKey,
     },
   })
 );
@@ -73,6 +75,16 @@ exports.getSignup = (req, res, next) => {
 };
 
 exports.postSignUp = (req, res, next) => {
+  const myValidationResult = validationResult(req);
+
+  if (!myValidationResult.isEmpty()) {
+    return res.status(422).render('auth/signup', {
+      docTitle: 'Sign Up',
+      path: '/signup',
+      errorMessage: myValidationResult.array()[0].msg,
+    });
+  }
+
   const { name, email, password, confirmPassword } = req.body;
 
   User.findOne({ email: email })

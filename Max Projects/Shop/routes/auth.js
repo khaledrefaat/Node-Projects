@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { body } = require('express-validator');
 
 const {
   getSignup,
@@ -15,7 +16,18 @@ const {
 
 router.get('/signup', getSignup);
 
-router.post('/signup', postSignUp);
+router.post(
+  '/signup',
+  [
+    body('email', 'Please enter a valid email.').isEmail(),
+    body('password', 'Password should be at least 6 chars').isLength({
+      min: 6,
+    }),
+    body('confirmPassword').isLength({ min: 6 }),
+    body('name').not().isEmpty(),
+  ],
+  postSignUp
+);
 
 router.post('/login', postLogin);
 
