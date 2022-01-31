@@ -1,53 +1,60 @@
 const Product = require('../models/product');
 const Order = require('../models/order');
 
+// helper functions
+
+const renderPage = (res, req, file, products, docTitle, path) => {
+  return res.render(file, {
+    docTitle,
+    path,
+    products,
+    isAuthenticated: req.session.isLoggedIn,
+  });
+};
+
 exports.getIndex = (req, res, next) => {
   Product.find()
-    .then(products => {
-      res.render('shop/index', {
-        products,
-        docTitle: 'Shop',
-        path: '/',
-      });
-    })
+    .then(products => renderPage(res, req, 'shop/index', products, 'Shop', '/'))
     .catch(err => console.log(err));
 };
 
 exports.getProducts = (req, res, next) => {
   Product.find()
-    .then(products => {
-      res.render('shop/product-list', {
-        docTitle: 'Products',
-        path: '/products',
+    .then(products =>
+      renderPage(
+        res,
+        req,
+        'shop/product-list',
         products,
-      });
-    })
+        'Products',
+        '/products'
+      )
+    )
     .catch(err => console.log(err));
 };
 
 exports.getProduct = (req, res, next) => {
   const { productId } = req.params;
   Product.findById(productId)
-    .then(product => {
-      res.render('shop/product-detail', {
-        docTitle: product.title,
-        path: '/product',
+    .then(product =>
+      renderPage(
+        res,
+        req,
+        'shop/product-detail',
         product,
-      });
-    })
+        product.title,
+        '/product'
+      )
+    )
     .catch(err => console.log(err));
 };
 
 exports.getCart = (req, res, next) => {
   req.user
     .populate('cart.items.productId')
-    .then(products => {
-      res.render('shop/cart', {
-        docTitle: 'Cart',
-        path: '/cart',
-        products: products.cart.items,
-      });
-    })
+    .then(products =>
+      renderPage(res, req, 'shop/cart', products, 'Cart', '/cart')
+    )
     .catch(err => console.log(err));
 };
 
@@ -109,7 +116,6 @@ exports.getOrders = (req, res, next) => {
       docTitle: 'Orders',
       path: '/orders',
       orders,
-      isAuthenticated: req.session.isLoggedin,
     });
   });
 };

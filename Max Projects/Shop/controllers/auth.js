@@ -14,21 +14,16 @@ const transporter = nodemailer.createTransport(
   })
 );
 
-const returnErrorMessage = req => {
-  const message = req.flash('error');
-  if (message.length > 0) {
-    return message[0];
-  }
-  return null;
-};
-
-exports.getLogin = (req, res, next) => {
-  res.render('auth/login', {
-    docTitle: 'Login',
-    path: '/login',
-    errorMessage: returnErrorMessage(req),
+const renderPages = (req, res, file, docTitle, path, errorMessage) => {
+  return res.render(file, {
+    docTitle,
+    path,
+    errorMessage: req.flash('error')[0] || null,
   });
 };
+
+exports.getLogin = (req, res, next) =>
+  renderPages(req, res, 'auth/login', 'Login', '/login');
 
 exports.postLogin = (req, res, next) => {
   const { email, password } = req.body;
@@ -46,7 +41,7 @@ exports.postLogin = (req, res, next) => {
           return res.redirect('/login');
         }
 
-        req.session.isLoggedin = true;
+        req.session.isLoggedIn = true;
         req.session.user = user;
         return req.session.save(err => {
           console.log(err);
@@ -66,13 +61,8 @@ exports.postLogout = (req, res, next) => {
   });
 };
 
-exports.getSignup = (req, res, next) => {
-  res.render('auth/signup', {
-    docTitle: 'Sign Up',
-    path: '/signup',
-    errorMessage: returnErrorMessage(req),
-  });
-};
+exports.getSignup = (req, res, next) =>
+  renderPages(req, res, 'auth/signup', 'Sign Up', '/signup');
 
 exports.postSignUp = (req, res, next) => {
   const myValidationResult = validationResult(req);
@@ -133,13 +123,8 @@ exports.postSignUp = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-exports.getReset = (req, res, next) => {
-  res.render('auth/reset', {
-    docTitle: 'reset',
-    path: '/reset',
-    errorMessage: returnErrorMessage(req),
-  });
-};
+exports.getReset = (req, res, next) =>
+  renderPages(req, res, 'auth/reset', 'Reset', '/reset');
 
 exports.postReset = (req, res, next) => {
   crypto.randomBytes(32, (err, buffer) => {
