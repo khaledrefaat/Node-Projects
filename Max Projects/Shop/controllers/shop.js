@@ -37,14 +37,12 @@ exports.getProduct = (req, res, next) => {
   const { productId } = req.params;
   Product.findById(productId)
     .then(product =>
-      renderPage(
-        res,
-        req,
-        'shop/product-detail',
+      res.render('shop/product-detail', {
+        docTitle: product.title,
+        path: '/product',
         product,
-        product.title,
-        '/product'
-      )
+        isAuthenticated: req.session.isLoggedIn,
+      })
     )
     .catch(err => console.log(err));
 };
