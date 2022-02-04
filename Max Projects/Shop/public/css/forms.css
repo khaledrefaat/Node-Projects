@@ -2,7 +2,7 @@
   width: 30rem;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 3rem;
+  margin-top: 4rem;
 }
 
 .login-form {
@@ -42,6 +42,6 @@
   font: inherit;
 }
 
-.form-control input.invalid {
+.form-control .invalid {
   border: 1px solid #ea2027;
 }

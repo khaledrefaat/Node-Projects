@@ -22,6 +22,7 @@ router.post(
   [
     body('email')
       .isEmail()
+      .normalizeEmail()
       .withMessage('Please enter a valid email.')
       .custom(value => {
         return User.findOne({ email: value }).then(user => {
@@ -32,21 +33,29 @@ router.post(
           }
         });
       }),
-    body('password', 'Password should be at least 6 chars').isLength({
-      min: 6,
-    }),
-    body('confirmPassword').custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error('Passwords must match.');
-      }
-      return true;
-    }),
+    body('password', 'Password should be at least 6 chars')
+      .isLength({
+        min: 6,
+      })
+      .trim(),
+    body('confirmPassword')
+      .trim()
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error('Passwords must match.');
+        }
+        return true;
+      }),
     body('name').not().isEmpty(),
   ],
   postSignUp
 );
 
-router.post('/login', postLogin);
+router.post(
+  '/login',
+  [body('email').normalizeEmail(), body('password').trim()],
+  postLogin
+);
 
 router.post('/logout', postLogout);
 
