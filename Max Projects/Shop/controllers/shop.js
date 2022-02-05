@@ -1,5 +1,7 @@
 const Product = require('../models/product');
 const Order = require('../models/order');
+const fs = require('fs');
+const path = require('path');
 
 // helper functions
 
@@ -51,12 +53,9 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  req.user
-    .populate('cart.items.productId')
-    .then(products =>
-      renderPage(res, req, 'shop/cart', products, 'Cart', '/cart')
-    )
-    .catch(err => console.log(err));
+  req.user.populate('cart.items.productId').then(user => {
+    renderPage(res, req, 'shop/cart', user.cart.items, 'Cart', '/cart');
+  });
 };
 
 exports.postCart = (req, res, next) => {
@@ -101,7 +100,7 @@ exports.postOrder = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
-  Order.find().then(orders => {
+  Order.find({ 'user.userId': req.user._id }).then(orders => {
     let total = 0;
 
     // this is so bad it's n^2 code
@@ -111,7 +110,7 @@ exports.getOrders = (req, res, next) => {
       });
     });
 
-    orders.total = total;
+    orders.total = total.toFixed(2);
 
     res.render('shop/orders', {
       docTitle: 'Orders',
@@ -119,4 +118,34 @@ exports.getOrders = (req, res, next) => {
       orders,
     });
   });
+};
+
+exports.getInvoice = (req, res, next) => {
+  const { orderId } = req.params;
+
+  return Order.findById(orderId)
+    .populate('user')
+    .then(order => {
+      if (!order) {
+        return next(new Error('No order found.'));
+      }
+      if (req.user._id.toString() !== order.user.userId.toString()) {
+        return next(new Error('UnAuthorized'));
+      }
+      const invoiceName = `invoice-${orderId}.pdf`;
+      const invoicePath = path.join('data', 'invoices', invoiceName);
+
+      fs.readFile(invoicePath, (err, data) => {
+        if (err) {
+          next(err);
+        }
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader(
+          'Content-Disposition',
+          `inline; filename="${invoiceName}"`
+        );
+
+        res.send(data);
+      });
+    });
 };
