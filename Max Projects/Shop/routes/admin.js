@@ -36,7 +36,6 @@ router.post(
       .isAlphanumeric('en-US', { ignore: 's' })
       .isLength({ min: 3 })
       .trim(),
-    body('imageUrl').isURL().trim(),
     body('price').not().isEmpty().isFloat(),
     body('description').isLength({ min: 10, max: 400 }).trim(),
   ],
@@ -51,7 +50,6 @@ router.post(
       .isAlphanumeric('en-US', { ignore: 's' })
       .isLength({ min: 3 })
       .trim(),
-    body('imageUrl').isURL().trim(),
     body('price').not().isEmpty().isFloat(),
     body('description').isLength({ min: 10, max: 400 }).trim(),
   ],

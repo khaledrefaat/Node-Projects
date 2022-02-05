@@ -31,7 +31,6 @@ exports.getAddProduct = (req, res, next) => {
     errorMessage: null,
     oldInputs: {
       title: '',
-      imageUrl: '',
       price: '',
       description: '',
     },
@@ -40,10 +39,11 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   const validationErrors = validationResult(req);
-  const { title, imageUrl, price, description } = req.body;
+  const image = req.file;
+  const { title, price, description } = req.body;
 
   if (!validationErrors.isEmpty()) {
-    res.render('admin/edit-product', {
+    return res.status(422).render('admin/edit-product', {
       docTitle: 'Add Product',
       path: '/admin/add-product',
       editing: false,
@@ -52,7 +52,22 @@ exports.postAddProduct = (req, res, next) => {
       errorMessage: validationErrors.array()[0].msg,
       oldInputs: {
         title,
-        imageUrl,
+        price,
+        description,
+      },
+    });
+  }
+
+  if (!image) {
+    return res.status(422).render('admin/edit-product', {
+      docTitle: 'Add Product',
+      path: '/admin/add-product',
+      editing: false,
+      isAuthenticated: req.session.isLoggedIn,
+      validationErrors: validationErrors.array(),
+      errorMessage: 'Please select valid image',
+      oldInputs: {
+        title,
         price,
         description,
       },
@@ -63,15 +78,12 @@ exports.postAddProduct = (req, res, next) => {
     title,
     price,
     description,
-    imageUrl,
+    image: image.path,
     userId: req.user._id,
   });
-
   product
     .save()
-    .then(result => {
-      res.redirect('/admin/products');
-    })
+    .then(() => res.redirect('/admin/products'))
     .catch(err => returnError(next, err));
 };
 
@@ -102,16 +114,14 @@ exports.getEditProduct = (req, res, next) => {
 };
 
 exports.postEditProduct = (req, res, next) => {
-  const { productId, title, imageUrl, price, description } = req.body;
+  const image = req.file;
+  const { productId, title, price, description } = req.body;
   const validationErrors = validationResult(req);
-
   console.table(validationErrors.array());
-
   Product.findById(productId)
     .then(product => {
       if (product.userId.toString() !== req.user._id.toString())
         return res.redirect('/');
-
       if (!validationErrors.isEmpty()) {
         return res.render('admin/edit-product', {
           docTitle: 'Edit Product',
@@ -123,17 +133,15 @@ exports.postEditProduct = (req, res, next) => {
           product,
         });
       }
-
       product.title = title;
       product.price = price;
-      product.imageUrl = imageUrl;
+      if (image) {
+        product.image = image.path;
+      }
       product.description = description;
       product.save();
     })
-    .then(result => {
-      console.log('Product Updated ^_^');
-      res.redirect('/admin/products');
-    })
+    .then(() => res.redirect('/admin/products'))
     .catch(err => returnError(next, err));
 };
 

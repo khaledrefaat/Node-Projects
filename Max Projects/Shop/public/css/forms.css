@@ -18,14 +18,19 @@
   margin: 1rem 0;
 }
 
-.form-control label,
-.form-control input {
+.form-control label {
+  margin-bottom: 0.25rem;
+  display: inline-block;
+}
+
+.form-control input[type='text'],
+.form-control input[type='number'] {
   display: block;
   width: 100%;
   margin-bottom: 0.25rem;
 }
 
-.form-control input {
+.form-control input:not([type='file']) {
   border: 1px solid #a1a1a1;
   font: inherit;
   border-radius: 4px;
@@ -42,6 +47,6 @@
   font: inherit;
 }
 
-.form-control .invalid {
+.form-control input.invalid {
   border: 1px solid #ea2027;
 }

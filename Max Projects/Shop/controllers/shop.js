@@ -13,8 +13,11 @@ const renderPage = (res, req, file, products, docTitle, path) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.find()
-    .then(products => renderPage(res, req, 'shop/index', products, 'Shop', '/'))
+  return Product.find()
+    .then(products => {
+      console.log(products);
+      return renderPage(res, req, 'shop/index', products, 'Shop', '/');
+    })
     .catch(err => console.log(err));
 };
 

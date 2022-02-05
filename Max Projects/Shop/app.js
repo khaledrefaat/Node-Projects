@@ -4,9 +4,11 @@ const User = require('./models/user');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDbStore = require('connect-mongodb-session')(session);
+const multer = require('multer');
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const keys = require('./config/keys');
+const { nanoid } = require('nanoid');
 
 const errorController = require('./controllers/error');
 
@@ -27,9 +29,28 @@ const routerAdmin = require('./routes/admin');
 const routerShop = require('./routes/shop');
 const routerAuth = require('./routes/auth');
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, { mimetype }, cb) => {
+    cb(null, `${nanoid()}.${mimetype.split('/')[1]}`);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  const type = file.mimetype;
+  if (type === 'image/png' || type === 'image/jpg' || type === 'image/jpeg') {
+    return cb(null, true);
+  }
+  return cb(null, false);
+};
+
 app.use(express.urlencoded({ extended: false }));
+app.use(multer({ storage, fileFilter }).single('image'));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(
   session({
     secret: 'My Very Secret Secret',
