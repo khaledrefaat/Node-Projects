@@ -2,6 +2,7 @@ const Product = require('../models/product');
 const Order = require('../models/order');
 const fs = require('fs');
 const path = require('path');
+const PDFDocument = require('pdfkit');
 
 // helper functions
 
@@ -16,10 +17,7 @@ const renderPage = (res, req, file, products, docTitle, path) => {
 
 exports.getIndex = (req, res, next) => {
   return Product.find()
-    .then(products => {
-      console.log(products);
-      return renderPage(res, req, 'shop/index', products, 'Shop', '/');
-    })
+    .then(products => renderPage(res, req, 'shop/index', products, 'Shop', '/'))
     .catch(err => console.log(err));
 };
 
@@ -135,17 +133,38 @@ exports.getInvoice = (req, res, next) => {
       const invoiceName = `invoice-${orderId}.pdf`;
       const invoicePath = path.join('data', 'invoices', invoiceName);
 
-      fs.readFile(invoicePath, (err, data) => {
-        if (err) {
-          next(err);
-        }
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader(
-          'Content-Disposition',
-          `inline; filename="${invoiceName}"`
-        );
+      const pdfDoc = new PDFDocument();
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `inline; filename="${invoiceName}"`);
+      pdfDoc.pipe(fs.createWriteStream(invoicePath));
+      pdfDoc.pipe(res);
 
-        res.send(data);
+      pdfDoc.fontSize(24).font('Times-Roman').text('Invoice');
+      let total = 0;
+      order.products.forEach(({ product, quantity }) => {
+        console.log(product);
+        total += product.price * quantity;
+        pdfDoc
+          .fontSize(16)
+          .font('Times-Roman')
+          .text(`${product.title} - ${quantity} x $${product.price}`);
       });
+      pdfDoc.text('-------------------------------------');
+      pdfDoc.font('Times-Bold').text(`Total Price: $${total.toFixed(2)}`);
+
+      pdfDoc.end();
+
+      // fs.readFile(invoicePath, (err, data) => {
+      //   if (err) {
+      //     next(err);
+      //   }
+      //   res.setHeader('Content-Type', 'application/pdf');
+      //   res.setHeader(
+      //     'Content-Disposition',
+      //     `inline; filename="${invoiceName}"`
+      //   );
+
+      //   res.send(data);
+      // });
     });
 };
