@@ -1,5 +1,6 @@
 const Product = require('../models/product');
 const { validationResult } = require('express-validator');
+const fileHelper = require('../util/file');
 
 const returnError = (next, error) => {
   console.log(error);
@@ -18,7 +19,9 @@ exports.getProducts = (req, res, next) => {
         isAuthenticated: req.session.isLoggedIn,
       });
     })
-    .catch(err => returnError(next, err));
+    .catch(err =>
+      returnError(next, 'Something went wrong, please try again later.')
+    );
 };
 
 exports.getAddProduct = (req, res, next) => {
@@ -84,7 +87,9 @@ exports.postAddProduct = (req, res, next) => {
   product
     .save()
     .then(() => res.redirect('/admin/products'))
-    .catch(err => returnError(next, err));
+    .catch(err =>
+      returnError(next, 'Adding product failed, please try again later.')
+    );
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -110,7 +115,9 @@ exports.getEditProduct = (req, res, next) => {
         errorMessage: null,
       });
     })
-    .catch(err => returnError(next, err));
+    .catch(err =>
+      returnError(next, 'Something went wrong, please try again later.')
+    );
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -136,18 +143,33 @@ exports.postEditProduct = (req, res, next) => {
       product.title = title;
       product.price = price;
       if (image) {
+        fileHelper.deleteFile(product.image);
         product.image = image.path;
       }
       product.description = description;
       product.save();
     })
     .then(() => res.redirect('/admin/products'))
-    .catch(err => returnError(next, err));
+    .catch(err =>
+      returnError(next, 'Updating product failed, please try again later.')
+    );
 };
 
 exports.postDeleteProduct = (req, res, next) => {
   const { productId } = req.body;
-  Product.deleteOne({ _id: productId, userId: req.user._id })
-    .then(() => res.redirect('/admin/products'))
-    .catch(err => returnError(next, err));
+  return Product.findOne({ _id: productId, userId: req.user._id })
+    .then(product => {
+      if (!product) {
+        returnError(next, 'Product was not Found.');
+      }
+      fileHelper.deleteFile(product.image);
+      product.remove().then(() => res.redirect('/admin/products'));
+    })
+    .catch(err =>
+      returnError(next, 'Deleting product failed, please try again later.')
+    );
+
+  // Product.deleteOne({ _id: productId, userId: req.user._id })
+  //   .then(() => res.redirect('/admin/products'))
+  //   .catch(err => returnError(next, err));
 };
