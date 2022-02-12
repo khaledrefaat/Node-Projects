@@ -1,14 +1,15 @@
 const { Schema, model } = require('mongoose');
 
+const generateModel = (type = String, required = true) => {
+  return { type, required };
+};
+
 const postSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  content: {
-    type: String,
-    required: true,
-  },
+  title: generateModel(),
+  content: generateModel(),
+  creator: generateModel(),
+  imageUrl: generateModel(),
+  createdAt: generateModel(Date),
 });
 
 module.exports = model('Post', postSchema);

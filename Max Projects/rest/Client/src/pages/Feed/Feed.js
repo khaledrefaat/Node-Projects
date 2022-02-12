@@ -18,12 +18,13 @@ class Feed extends Component {
     status: '',
     postPage: 1,
     postsLoading: true,
-    editLoading: false
+    editLoading: false,
   };
 
   componentDidMount() {
-    fetch('URL')
+    fetch('http://localhost/9000/api/posts')
       .then(res => {
+        console.log(res.json());
         if (res.status !== 200) {
           throw new Error('Failed to fetch user status.');
         }
@@ -50,7 +51,7 @@ class Feed extends Component {
       page--;
       this.setState({ postPage: page });
     }
-    fetch('URL')
+    fetch('http://localhost:9000/api/posts')
       .then(res => {
         if (res.status !== 200) {
           throw new Error('Failed to fetch posts.');
@@ -61,7 +62,7 @@ class Feed extends Component {
         this.setState({
           posts: resData.posts,
           totalPosts: resData.totalItems,
-          postsLoading: false
+          postsLoading: false,
         });
       })
       .catch(this.catchError);
@@ -92,7 +93,7 @@ class Feed extends Component {
 
       return {
         isEditing: true,
-        editPost: loadedPost
+        editPost: loadedPost,
       };
     });
   };
@@ -103,15 +104,25 @@ class Feed extends Component {
 
   finishEditHandler = postData => {
     this.setState({
-      editLoading: true
+      editLoading: true,
     });
     // Set up data (with image!)
-    let url = 'URL';
+    let url = 'http://localhost:9000/api/posts';
+    const method = 'POST';
     if (this.state.editPost) {
-      url = 'URL';
+      url = 'http://localhost:9000/api/posts';
     }
-
-    fetch(url)
+    console.log(postData);
+    fetch(url, {
+      method,
+      body: JSON.stringify({
+        title: postData.title,
+        content: postData.content,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Creating or editing a post failed!');
@@ -124,7 +135,7 @@ class Feed extends Component {
           title: resData.post.title,
           content: resData.post.content,
           creator: resData.post.creator,
-          createdAt: resData.post.createdAt
+          createdAt: resData.post.createdAt,
         };
         this.setState(prevState => {
           let updatedPosts = [...prevState.posts];
@@ -140,7 +151,7 @@ class Feed extends Component {
             posts: updatedPosts,
             isEditing: false,
             editPost: null,
-            editLoading: false
+            editLoading: false,
           };
         });
       })
@@ -150,7 +161,7 @@ class Feed extends Component {
           isEditing: false,
           editPost: null,
           editLoading: false,
-          error: err
+          error: err,
         });
       });
   };

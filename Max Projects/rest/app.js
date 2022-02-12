@@ -18,9 +18,14 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/posts', feedRoutes);
+app.use('/api/posts', feedRoutes);
+
+app.use((err, req, res, next) => {
+  res.status(err.code || 500);
+  res.json({ message: err.message || 'An unknown error occurred.' });
+});
 
 mongoose
   .connect(MONGO_URI)
-  .then(() => app.listen(8080))
+  .then(() => app.listen(9000))
   .catch(err => console.log(err));
