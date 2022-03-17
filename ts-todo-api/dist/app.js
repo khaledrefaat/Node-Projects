@@ -4,8 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const todos_routes_1 = __importDefault(require("./routes/todos-routes"));
 const app = (0, express_1.default)();
-app.use('/', (req, res, next) => {
-    res.send('<h1>App</h1>');
-});
+app.use(express_1.default.urlencoded({ extended: true }));
+app.use(express_1.default.json());
+app.use('/', todos_routes_1.default);
 app.listen(9000);
