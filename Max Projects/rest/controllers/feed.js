@@ -1,5 +1,6 @@
 const HttpError = require('../models/http-error');
-const Post = require('../models/posts');
+const Post = require('../models/post');
+const { validationResult } = require('express-validator');
 
 exports.getPosts = async (req, res, next) => {
   let posts;
@@ -13,6 +14,12 @@ exports.getPosts = async (req, res, next) => {
 };
 
 exports.postPosts = async (req, res, next) => {
+  const validationErrors = validationResult(req);
+
+  if (!validationErrors.isEmpty()) {
+    return next(new HttpError(validationErrors.array()[0].msg, 422));
+  }
+
   const { title, content } = req.body;
   let post;
 
@@ -21,7 +28,6 @@ exports.postPosts = async (req, res, next) => {
       title,
       content,
       creator: 'Khaled Elkady',
-      createdAt: new Date(),
       imageUrl: '/images/dog.jpg',
     });
     await post.save();
